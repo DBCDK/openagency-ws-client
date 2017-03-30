@@ -1,0 +1,8 @@
+[
+    {
+        "method": "POST",
+        "url": "/",
+        "contentType": "text/xml",
+        "content": "data.xml"
+    }
+]

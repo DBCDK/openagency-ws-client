@@ -1,0 +1,14 @@
+[
+    {
+        "method": "POST",
+        "url": "/",
+        "contentType": "text/xml",
+        "content": "710100.xml"
+    },
+    {
+        "method": "POST",
+        "url": "/emptyResult",
+        "contentType": "text/xml",
+        "content": "empty.xml"
+    }
+]
