@@ -1,6 +1,15 @@
 #!groovy
 
 pipeline {
+    options {
+
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+        timeout(time: 1, unit: 'HOURS') 
+    }
+    trigges {
+        pollSCM('H/5 * * * *')
+    }
+
     tools {
         maven 'Maven 3'
     }
