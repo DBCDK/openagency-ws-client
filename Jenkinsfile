@@ -11,15 +11,15 @@ pipeline {
                 checkout scm
             }
         }
-    }
-    stage("build") {
-        steps {
-            echo "build Missing"
+        stage("build") {
+            steps {
+                echo "build Missing"
+            }
         }
-    }
-    stage("Repo Upload") {
-        steps {
-            echo "Repo Upload Missing"
+        stage("Repo Upload") {
+            steps {
+                echo "Repo Upload Missing"
+            }
         }
     }
 }
