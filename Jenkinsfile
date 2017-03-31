@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage("build") {
             steps {
-                sh "mvn -XX:MaxPermSize=128m verify pmd:pmd findbugs:findbugs"
+                sh "mvn verify pmd:pmd findbugs:findbugs"
             }
             post {
                 always {
