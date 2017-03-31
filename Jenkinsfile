@@ -6,20 +6,27 @@ pipeline {
     }
     agent { label "devel8-head" }
     stages {
-        stage("Checkout") {
-            steps {
-                checkout scm
-            }
-        }
         stage("build") {
             steps {
-                echo "build Missing"
+                sh "mvn -XX:MaxPermSize=128m verify pmd:pmd findbugs:findbugs"
+            }
+            post {
+                always {
+                    junit '**/target/*.xml'
+
+                }
             }
         }
-        stage("Repo Upload") {
-            steps {
-                echo "Repo Upload Missing"
-            }
+    }
+    post {
+        always {
+            archiveArtifacts '**/target/*.war, **/target/*.jar'
+        }
+        success {
+            build job: 'hive', wait: false
+            emailext subject: "SUCCESSFUL: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}",
+                    body: """"SUCCESSFUL: Job '${env.JOB_NAME}' checkout console output at ${env.BUILD_URL}""",
+                    to: 'jp@dbc.dk'
         }
     }
 }
