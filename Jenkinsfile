@@ -9,27 +9,24 @@ pipeline {
         pollSCM('H/5 * * * *')
         upstream(upstreamProjects: "dbc-pom,", threshold: hudson.model.Result.SUCCESS)
     }
-
-    /*
+    
     tools {
         maven 'Maven 3'
-    } */
+    }
     agent { label "devel8-head" }
     stages {
         stage("build") {
             steps {
-                withMaven {
-                    sh "mvn verify pmd:pmd findbugs:findbugs"
-                }
+
+                sh "mvn verify pmd:pmd findbugs:findbugs"
             }
-/*
+
             post {
                 always {
                     junit 'target/failsafe-reports/*.xml'
-
+                    PmdPublisher '**/pmd.xml'
                 }
             }
-*/
         }
     }
     post {
