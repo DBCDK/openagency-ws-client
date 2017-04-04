@@ -38,8 +38,6 @@ public class CacheTest {
      */
     @Test
     public void testGet() {
-        // TODO: Understand this code..
-        // FIXME: test for jenkins file
         long maxAgeMs = 10;
         Cache<String, String> cache = new Cache<>(maxAgeMs);
         Provider provider = mock(Provider.class);
