@@ -7,7 +7,7 @@ pipeline {
     }
     triggers {
         pollSCM('H/5 * * * *')
-        upstream(upstreamProjects: "jscommon-head-jessie,", threshold: hudson.model.Result.SUCCESS)
+        upstream(upstreamProjects: "dbc-pom,", threshold: hudson.model.Result.SUCCESS)
     }
 
     tools {
@@ -30,18 +30,19 @@ pipeline {
     post {
         always {
             archiveArtifacts '**/target/*.war, **/target/*.jar'
+            emailextrecipients([[$class: 'DevelopersRecipientProvider'], [$class: 'FirstFailingBuildSuspectsRecipientProvider']])
         }
         success {
             build job: 'hive', wait: false
             emailext subject: "SUCCESSFUL: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]",
                     body: """"SUCCESSFUL: Job '${env.JOB_NAME}' checkout console output at ${env.BUILD_URL}""",
-                    to: 'jp@dbc.dk'
+                    to: 'iscrum@dbc.dk',
             sh "mvn deploy"
         }
         failure {
             emailext subject: "FAILED: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]",
                     body: """"FAILED: Job '${env.JOB_NAME}' checkout console output at ${env.BUILD_URL}""",
-                    to: 'jp@dbc.dk',
+                    to: 'iscrum@dbc.dk',
                     attachLog: true
         }
     }
