@@ -17,7 +17,9 @@ pipeline {
     stages {
         stage("build") {
             steps {
-                sh "mvn verify pmd:pmd findbugs:findbugs"
+                withMaven {
+                    sh "mvn verify pmd:pmd findbugs:findbugs"
+                }
             }
 /*
             post {
