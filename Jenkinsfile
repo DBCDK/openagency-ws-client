@@ -27,6 +27,7 @@ pipeline {
                     script {
                         step([$class: 'PmdPublisher', pattern: '**/target/pmd.xml'])
                         step([$class: 'FindBugsPublisher', pattern: '**/findbugsXml.xml'])
+                        step([$class: 'TasksPublisher', pattern: '**/tasks.txt', high: 'FIXME', normal: 'TODO'])"
                         step([$class: 'AnalysisPublisher'])
                     }
                 }
