@@ -3,10 +3,11 @@
 pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '30'))
-        timeout(time: 1, unit: 'HOURS') 
+        timeout(time: 1, unit: 'HOURS')
     }
     triggers {
         pollSCM('H/5 * * * *')
+        upstream(upstreamProjects: "jscommon-head-jessie,", threshold: hudson.model.Result.SUCCESS)
     }
 
     tools {
