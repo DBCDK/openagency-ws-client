@@ -41,13 +41,14 @@ pipeline {
             build job: 'hive', wait: false
             emailext subject: "SUCCESSFUL: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]",
                     body: """"SUCCESSFUL: Job '${env.JOB_NAME}' checkout console output at ${env.BUILD_URL}""",
-                    to: 'iscrum@dbc.dk'
+//                    to: 'iscrum@dbc.dk'
+                    to: 'jp@dbc.dk'
             sh "mvn deploy"
         }
         failure {
             emailext subject: "FAILED: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]",
                     body: """"FAILED: Job '${env.JOB_NAME}' checkout console output at ${env.BUILD_URL}""",
-                    to: 'iscrum@dbc.dk',
+//                    to: 'jp@dbc.dk',
                     attachLog: true
         }
     }
