@@ -10,9 +10,10 @@ pipeline {
         upstream(upstreamProjects: "dbc-pom,", threshold: hudson.model.Result.SUCCESS)
     }
 
+    /*
     tools {
         maven 'Maven 3'
-    }
+    } */
     agent { label "devel8-head" }
     stages {
         stage("build") {
