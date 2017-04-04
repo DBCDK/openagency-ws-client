@@ -24,7 +24,10 @@ pipeline {
             post {
                 always {
                     junit 'target/failsafe-reports/*.xml'
+                    FindBugsPublisher '**/findbugsXml.xml'
                     step([$class: 'PmdPublisher', pattern: '**/target/pmd.xml'])
+                    step([$class: 'FindBugsPublisher', pattern: '**/findbugsXml.xml'])
+                    step([$class: 'AnalysisPublisher'])
                 }
             }
 
