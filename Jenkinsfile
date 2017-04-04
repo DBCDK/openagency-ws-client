@@ -19,12 +19,14 @@ pipeline {
             steps {
                 sh "mvn verify pmd:pmd findbugs:findbugs"
             }
+/*
             post {
                 always {
                     junit 'target/failsafe-reports/*.xml'
 
                 }
             }
+*/
         }
     }
     post {
