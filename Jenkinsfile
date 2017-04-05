@@ -13,7 +13,7 @@ pipeline {
     tools {
         maven 'Maven 3'
     }
-    agent { label "devel8-head" }
+    agent { label "devel8-head" docker 'docker-i.dbc.dk/ja7dev' }
     stages {
         stage("build") {
             steps {
