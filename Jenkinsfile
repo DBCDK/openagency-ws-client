@@ -10,7 +10,7 @@ pipeline {
         upstream(upstreamProjects: "dbc-pom,", threshold: hudson.model.Result.SUCCESS)
     }
     
-    agent { label "devel8-head" docker 'docker-i.dbc.dk/ja7dev' }
+    agent { docker { label: "devel8-head" docker 'docker-i.dbc.dk/ja7dev' args '-v /tmp:/tmp' } }
     stages {
         stage("build") {
             steps {
