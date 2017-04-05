@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage("build") {
             steps {
-
+                sh "env"
                 sh "mvn verify pmd:pmd findbugs:findbugs"
             }
 
