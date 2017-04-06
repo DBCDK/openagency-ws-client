@@ -11,11 +11,12 @@ pipeline {
     }
     
     agent {
-        docker {
-            label "devel8-head"
+
+        label "devel8-head"
+/*        docker {
             image 'docker-i.dbc.dk/ja7dev'
             args '-v /tmp:/tmp'
-        }
+        }                                                */
     }
     stages {
         stage("build") {
