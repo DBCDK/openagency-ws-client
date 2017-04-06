@@ -15,7 +15,7 @@ svn copy . https://svn.dbc.dk/repos/openagency-ws-client/branches/$NEWVERSION
 Change trunk version in your favorite editor 
 
 
-# TOTO inform downstream projects 
+# TODO inform downstream projects 
   
  * hive
  * holdings-items
@@ -24,4 +24,5 @@ Change trunk version in your favorite editor
  * rawrepo-mq
  * rawrepo-oai
  * rawrapo-old-1.0
+ * updateservice
 
