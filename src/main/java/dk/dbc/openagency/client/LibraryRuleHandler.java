@@ -224,13 +224,11 @@ public class LibraryRuleHandler {
             throw new OpenAgencyException(error);
         }
 
-        if (response.libraryRules == null) {
-            throw new OpenAgencyException(ErrorType.AGENCY_NOT_FOUND, request, response);
-        }
-
         Set<String> libraryRules = new HashSet<>();
-        for (LibraryRules library : response.libraryRules) {
-            libraryRules.add(library.getAgencyId());
+        if (response.libraryRules != null) {
+            for (LibraryRules library : response.libraryRules) {
+                libraryRules.add(library.getAgencyId());
+            }
         }
 
         return libraryRules;
