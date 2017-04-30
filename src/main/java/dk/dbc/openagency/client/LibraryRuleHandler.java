@@ -220,7 +220,7 @@ public class LibraryRuleHandler {
 
         ErrorType error = response.getError();
         if (error != null) {
-            log.error("Looking up library rules for PH libraries failed");
+            log.error("Looking up library rules for {} libraries failed", catalogingTemplateSet);
             throw new OpenAgencyException(error);
         }
 
