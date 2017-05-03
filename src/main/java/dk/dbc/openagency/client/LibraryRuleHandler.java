@@ -69,6 +69,11 @@ public class LibraryRuleHandler {
         }
     }
 
+    public LibraryRuleHandler(OpenAgencyServiceFromURL service, int maxAge) {
+        this.cache = new Cache<>(maxAge * 3600 * 1000);
+        this.service = service;
+    }
+
     public LibraryRuleHandler(OpenAgencyServiceFromURL service) {
         this.cache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
         this.service = service;
@@ -153,11 +158,8 @@ public class LibraryRuleHandler {
         return allowedRules;
     }
 
-    private List<LibraryRule> getLibraryRulesAllFromWebService(String agencyId) throws OpenAgencyException {
-        LibraryRulesRequest request = new LibraryRulesRequest();
-        request.setAgencyId(agencyId);
-
-        LibraryRulesResponse response = null;
+    private LibraryRulesResponse executeRequest(LibraryRulesRequest request) throws OpenAgencyException {
+        LibraryRulesResponse response;
         synchronized (service) {
             if (service.authentication != null) {
                 request.setAuthentication(service.authentication);
@@ -168,9 +170,18 @@ public class LibraryRuleHandler {
             } catch (RuntimeException e) {
                 log.error("Exception getting Library Rules from OpenAgency");
                 Throwable cause = e.getCause();
-                throw new OpenAgencyException(ErrorType.SERVICE_UNAVAILABLE, cause, request, response);
+                throw new OpenAgencyException(ErrorType.SERVICE_UNAVAILABLE, cause, request, null);
             }
         }
+        return response;
+    }
+
+    private List<LibraryRule> getLibraryRulesAllFromWebService(String agencyId) throws OpenAgencyException {
+        LibraryRulesRequest request = new LibraryRulesRequest();
+        request.setAgencyId(agencyId);
+        log.debug("Looking for agencyId {}", agencyId);
+
+        LibraryRulesResponse response = executeRequest(request);
 
         ErrorType error = response.getError();
         if (error != null) {
@@ -202,21 +213,9 @@ public class LibraryRuleHandler {
         rule.setName("cataloging_template_set");
         rule.setString(catalogingTemplateSet);
         request.getLibraryRule().add(rule);
+        log.debug("Looking for catalogingTemplateSet {}", catalogingTemplateSet);
 
-        LibraryRulesResponse response = null;
-        synchronized (service) {
-            if (service.authentication != null) {
-                request.setAuthentication(service.authentication);
-            }
-
-            try {
-                response = service.port.libraryRules(request);
-            } catch (RuntimeException e) {
-                log.error("Exception getting Library Rules from OpenAgency");
-                Throwable cause = e.getCause();
-                throw new OpenAgencyException(ErrorType.SERVICE_UNAVAILABLE, cause, request, response);
-            }
-        }
+        LibraryRulesResponse response = executeRequest(request);
 
         ErrorType error = response.getError();
         if (error != null) {

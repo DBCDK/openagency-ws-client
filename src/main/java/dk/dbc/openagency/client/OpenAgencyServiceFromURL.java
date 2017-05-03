@@ -32,8 +32,6 @@ import java.net.URL;
 public class OpenAgencyServiceFromURL {
     private final Logger log = LoggerFactory.getLogger(OpenAgencyServiceFromURL.class);
 
-
-
     final OpenAgencyService service;
     final Authentication authentication;
     final OpenAgencyPortType port;
@@ -46,6 +44,7 @@ public class OpenAgencyServiceFromURL {
         private Authentication authentication = null;
         int connectTimeout = 2500;
         int requestTimeout = 10000;
+        int cacheAge = 8;
 
         private Builder() {
         }
@@ -68,11 +67,13 @@ public class OpenAgencyServiceFromURL {
             return this;
         }
 
+        public Builder setCacheAge(int newAge) {
+            this.cacheAge = newAge;
+            return this;
+        }
+
         public OpenAgencyServiceFromURL build(String url) {
-            OpenAgencyServiceFromURL service = new OpenAgencyServiceFromURL(url,
-                                                                            authentication,
-                                                                            connectTimeout,
-                                                                            requestTimeout);
+            OpenAgencyServiceFromURL service = new OpenAgencyServiceFromURL(url, authentication, connectTimeout, requestTimeout, cacheAge);
             return service;
         }
     }
@@ -81,7 +82,7 @@ public class OpenAgencyServiceFromURL {
         return new Builder();
     }
 
-    private OpenAgencyServiceFromURL(String url, Authentication authentication, int connectTimeout, int requestTimeout) {
+    private OpenAgencyServiceFromURL(String url, Authentication authentication, int connectTimeout, int requestTimeout, int cacheAge) {
         log.info("Create OpenAgency from url: '{}', connectTimeout:{}, requestTimeout:{}", url, connectTimeout, requestTimeout);
         this.authentication = authentication;
         URL wsdl = OpenAgencyServiceFromURL.class.getResource("/openagency.wsdl");
@@ -91,7 +92,7 @@ public class OpenAgencyServiceFromURL {
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
         bindingProvider.getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         bindingProvider.getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        libraryRuleHandler = new LibraryRuleHandler(this);
+        libraryRuleHandler = new LibraryRuleHandler(this, cacheAge);
         libraryTypeList = new LibraryTypeList(this);
         showOrder = new ShowOrder(this);
     }
