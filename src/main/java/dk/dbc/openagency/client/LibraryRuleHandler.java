@@ -18,6 +18,7 @@
  */
 package dk.dbc.openagency.client;
 
+import net.jodah.failsafe.Failsafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -166,7 +167,7 @@ public class LibraryRuleHandler {
             }
 
             try {
-                response = service.port.libraryRules(request);
+                response = Failsafe.with(service.RETRYPOLICY).get(()->service.port.libraryRules(request));
             } catch (RuntimeException e) {
                 log.error("Exception getting Library Rules from OpenAgency");
                 Throwable cause = e.getCause();

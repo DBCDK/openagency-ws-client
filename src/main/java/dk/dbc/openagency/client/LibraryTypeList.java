@@ -18,6 +18,8 @@
  */
 package dk.dbc.openagency.client;
 
+import net.jodah.failsafe.Failsafe;
+
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
@@ -73,7 +75,7 @@ public class LibraryTypeList {
         LibraryTypeListResponse response;
         try {
             synchronized (service) {
-                response = service.port.libraryTypeList(request);
+                response = Failsafe.with(service.RETRYPOLICY).get(()->service.port.libraryTypeList(request));
             }
         } catch (RuntimeException e) {
             Throwable cause = e.getCause();

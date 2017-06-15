@@ -18,89 +18,58 @@
  */
 package dk.dbc.openagency.client;
 
-import com.github.tomakehurst.wiremock.client.MappingBuilder;
+
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToXml;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import static com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED;
 import org.junit.Before;
 import org.junit.Rule;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-
-/**
- *
- * @author Morten Bøgeskov <mb@dbc.dk>
- */
 public class WireMocker {
 
-    public int port;
     @Rule
-    public WireMockRule wireMockRule;
-    public String url;
+    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
 
-    public WireMocker() throws RuntimeException {
-        port = Integer.parseInt(System.getProperty("wiremock.port"));
-        wireMockRule = new WireMockRule(port);
-        url = "http://localhost:" + port + "/";
-    }
+    protected OpenAgencyServiceFromURL service;
+    int requestTimeout=1000;
+
 
     @Before
-    public void setUpWireMock() throws Exception {
-
-        stubFor(post(urlMatching(".*"))
-                .willReturn(aResponse()
-                        .withStatus(501)
-                        .withHeader("Content-Type", "text/html")
-                        .withBody("404 body")));
-        setupWiremock();
+    public void setUp() {
+        service = OpenAgencyServiceFromURL.builder().requestTimeout(requestTimeout).build("http://localhost:" + wireMockRule.port() + "/");
+        WireMock.resetAllScenarios();
+        WireMock.removeAllMappings();
     }
 
-    private InputStream open(String className, String file) {
-        String path = "/" + className + "/" + file;
-        InputStream stream = getClass().getResourceAsStream(path);
-        if (stream == null) {
-            throw new IllegalArgumentException("Cannot open test-resource: " + path);
-        }
-        return stream;
+
+    protected void stubForReturnOK(String request, String fileName) {
+        stubFor(post(urlEqualTo("/"))
+                .withRequestBody(equalToXml(request))
+                .willReturn(aResponse().withStatus(200)
+                        .withHeader("Content-Type", "text/xml; charset=utf-8")
+                        .withBodyFile(fileName)
+                )
+        );
     }
 
-    public void setupWiremock() throws IOException {
-        String className = getClass().getName();
-        Matcher matcher = Pattern.compile("^(?:.*\\.)?(.*?)(?:IT)$").matcher(className);
-        if (matcher.find()) {
-            className = matcher.group(1);
-        }
-        InputStream stream = open(className, "wiremock.json");
-        JsonReader reader = Json.createReader(stream);
-        JsonArray array = reader.readArray();
-        for (int i = 0 ; i < array.size() ; i++) {
-            JsonObject obj = array.getJsonObject(i);
-            String path = obj.getString("url", null);
-            String body = obj.getString("body", null);
-            String contentPath = obj.getString("content", null);
-            InputStream contentResource = open(className, contentPath);
-            int len = contentResource.available();
-            byte[] content = new byte[len];
-            new DataInputStream(contentResource).readFully(content);
-            MappingBuilder req = post(urlMatching(path));
-            if (body != null) {
-                req.withRequestBody(matching(body));
-            }
-            stubFor(req
-                    .willReturn(aResponse()
-                            .withStatus(200)
-                            .withHeader("Content-Type", "text/xml; charset=utf-8")
-                            .withBody(content)));
+
+    protected void stubForSequence(String request, ResponseDefinitionBuilder... ResponseList) {
+        for (int i = 0; i < ResponseList.length; i++) {
+            stubFor(post(urlEqualTo("/"))
+                    .withRequestBody(equalToXml(request))
+                    .inScenario("request").whenScenarioStateIs(i == 0 ? STARTED : String.valueOf(i))
+                    .willReturn(ResponseList[i])
+                    .willSetStateTo(String.valueOf(i + 1))
+            );
 
         }
     }
+};
 
-}

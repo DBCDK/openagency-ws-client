@@ -18,6 +18,8 @@
  */
 package dk.dbc.openagency.client;
 
+import net.jodah.failsafe.Failsafe;
+
 import java.net.SocketTimeoutException;
 import java.util.List;
 
@@ -79,7 +81,7 @@ public class ShowOrder {
             ShowOrderResponse response;
             try {
                 synchronized (service) {
-                    response = service.port.showOrder(request);
+                    response = Failsafe.with(service.RETRYPOLICY).get(()->service.port.showOrder(request));
                 }
             } catch (RuntimeException e) {
                 Throwable cause = e.getCause();

@@ -1,9 +1,0 @@
-[
-    {
-        "method": "POST",
-        "url": "/",
-        "body": ".*870970.*",
-        "contentType": "text/xml",
-        "content": "870970.xml"
-    }
-]

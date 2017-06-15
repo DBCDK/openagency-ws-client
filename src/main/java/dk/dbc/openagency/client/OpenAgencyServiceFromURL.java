@@ -19,11 +19,15 @@
 package dk.dbc.openagency.client;
 
 import com.sun.xml.ws.client.BindingProviderProperties;
+import net.jodah.failsafe.RetryPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.WebServiceException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -31,6 +35,12 @@ import java.net.URL;
  */
 public class OpenAgencyServiceFromURL {
     private final Logger log = LoggerFactory.getLogger(OpenAgencyServiceFromURL.class);
+
+    final RetryPolicy RETRYPOLICY = new RetryPolicy()
+            .retryOn(com.sun.xml.ws.protocol.soap.MessageCreationException.class,
+                    WebServiceException.class, SocketTimeoutException.class)
+            .withDelay(500, TimeUnit.MICROSECONDS)
+            .withMaxRetries(7);
 
     final OpenAgencyService service;
     final Authentication authentication;
