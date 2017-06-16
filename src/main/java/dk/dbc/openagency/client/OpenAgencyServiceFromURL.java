@@ -37,9 +37,8 @@ public class OpenAgencyServiceFromURL {
     private final Logger log = LoggerFactory.getLogger(OpenAgencyServiceFromURL.class);
 
     final RetryPolicy RETRYPOLICY = new RetryPolicy()
-            .retryOn(com.sun.xml.ws.protocol.soap.MessageCreationException.class,
-                    WebServiceException.class, SocketTimeoutException.class)
-            .withDelay(500, TimeUnit.MICROSECONDS)
+            .retryOn(RuntimeException.class, Exception.class)
+            .withDelay(500, TimeUnit.MILLISECONDS)
             .withMaxRetries(7);
 
     final OpenAgencyService service;
