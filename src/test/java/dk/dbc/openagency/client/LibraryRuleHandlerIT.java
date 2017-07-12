@@ -18,14 +18,12 @@
  */
 package dk.dbc.openagency.client;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import com.github.tomakehurst.wiremock.http.Fault;
 import dk.dbc.openagency.client.LibraryRuleHandler.Rule;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class LibraryRuleHandlerIT extends WireMocker {
 
@@ -89,17 +87,6 @@ public class LibraryRuleHandlerIT extends WireMocker {
         String actual = libraryRules.getCatalogingTemplate("710100");
         assertEquals(actual, "fbs");
     }
-
-    @Test
-    public void testgetCatalogingTemplateInt() throws Exception {
-        stubForReturnOK("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><ns1:libraryRulesRequest xmlns:ns1=\"http://oss.dbc.dk/ns/openagency\"><ns1:agencyId>710100</ns1:agencyId></ns1:libraryRulesRequest></S:Body></S:Envelope>",
-                        "libraryRule_710100.xml");
-
-        LibraryRuleHandler libraryRules = service.libraryRules();
-        String actual = libraryRules.getCatalogingTemplate(710100);
-        assertEquals(actual, "fbs");
-    }
-
 
     @Test
     public void testRetriesFor_executeRequest() throws Exception {

@@ -35,7 +35,9 @@ public class LibraryRuleHandler {
     private final Logger log = LoggerFactory.getLogger(LibraryRuleHandler.class);
 
     private static final int MAX_AGE_HOURS = 8;
-    private final Cache<String, Set<String>> cache;
+    private final Cache<String, Set<String>> libraryRulesCache;
+    private final Cache<String, String> catalogingTemplateCache;
+    private final Cache<String, Set<String>> catalogingTemplateSetCache;
     private final OpenAgencyServiceFromURL service;
 
     public enum Rule {
@@ -71,12 +73,17 @@ public class LibraryRuleHandler {
     }
 
     public LibraryRuleHandler(OpenAgencyServiceFromURL service, int maxAge) {
-        this.cache = new Cache<>(maxAge * 3600 * 1000);
+        this.libraryRulesCache = new Cache<>(maxAge * 3600 * 1000);
+        this.catalogingTemplateCache = new Cache<>(maxAge * 3600 * 1000);
+        this.catalogingTemplateSetCache = new Cache<>(maxAge * 3600 * 1000);
         this.service = service;
     }
 
     public LibraryRuleHandler(OpenAgencyServiceFromURL service) {
-        this.cache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
+        this.libraryRulesCache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
+        this.catalogingTemplateCache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
+        this.catalogingTemplateSetCache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
+
         this.service = service;
     }
 
@@ -86,7 +93,7 @@ public class LibraryRuleHandler {
 
     public boolean isAllowed(String agencyId, Rule rule) throws OpenAgencyException {
         try {
-            Set<String> allowedLibraryRules = cache.get(agencyId, new Cache.CacheProvider<String, Set<String>>() {
+            Set<String> allowedLibraryRules = libraryRulesCache.get(agencyId, new Cache.CacheProvider<String, Set<String>>() {
                 @Override
                 public Set<String> provide(String key) {
                     try {
@@ -107,25 +114,37 @@ public class LibraryRuleHandler {
         }
     }
 
-    public String getCatalogingTemplate(int agencyId) throws OpenAgencyException {
-        return getCatalogingTemplate(Helper.agencyIdToString(agencyId));
-    }
-
     public String getCatalogingTemplate(String agencyId) throws OpenAgencyException {
-        List<LibraryRule> libraryRules = getLibraryRulesAllFromWebService(agencyId);
-        for (LibraryRule libraryRule : libraryRules) {
-            if ("cataloging_template_set".equals(libraryRule.getName()) && !libraryRule.getString().isEmpty()) {
-                return libraryRule.getString();
-            }
-        }
+        try {
+            return catalogingTemplateCache.get(agencyId, new Cache.CacheProvider<String, String>() {
+                @Override
+                public String provide(String key) {
+                    try {
+                        List<LibraryRule> libraryRules = getLibraryRulesAllFromWebService(agencyId);
+                        for (LibraryRule libraryRule : libraryRules) {
+                            if ("cataloging_template_set".equals(libraryRule.getName()) && !libraryRule.getString().isEmpty()) {
+                                return libraryRule.getString();
+                            }
+                        }
 
-        return null;
+                        throw new OpenAgencyException(ErrorType.AGENCY_NOT_FOUND);
+                    } catch (OpenAgencyException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+        } catch (RuntimeException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof OpenAgencyException) {
+                throw (OpenAgencyException) cause;
+            }
+            throw e;
+        }
     }
 
     public Set<String> getLibrariesByCatalogingTemplateSet(String catalogingTemplateSet) throws OpenAgencyException {
         try {
-            String cacheString = "catalogingTemplateSet_" + catalogingTemplateSet;
-            Set<String> libraries = cache.get(cacheString, new Cache.CacheProvider<String, Set<String>>() {
+            return catalogingTemplateSetCache.get(catalogingTemplateSet, new Cache.CacheProvider<String, Set<String>>() {
                 @Override
                 public Set<String> provide(String key) {
                     try {
@@ -135,8 +154,6 @@ public class LibraryRuleHandler {
                     }
                 }
             });
-
-            return libraries;
         } catch (RuntimeException e) {
             Throwable cause = e.getCause();
             if (cause instanceof OpenAgencyException) {
@@ -167,7 +184,7 @@ public class LibraryRuleHandler {
             }
 
             try {
-                response = Failsafe.with(service.RETRYPOLICY).get(()->service.port.libraryRules(request));
+                response = Failsafe.with(service.RETRYPOLICY).get(() -> service.port.libraryRules(request));
             } catch (RuntimeException e) {
                 log.error("Exception getting Library Rules from OpenAgency");
                 Throwable cause = e.getCause();
