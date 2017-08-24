@@ -59,6 +59,7 @@ public class LibraryRuleHandlerIT extends WireMocker {
         assertEquals(true, libraryRules.isAllowed(710100, Rule.USE_ENRICHMENTS));
         assertEquals(false, libraryRules.isAllowed(710100, Rule.USE_HOLDINGS_ITEM));
         assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_CREATE_COMMON_RECORD));
+        assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_ADD_DK5_TO_PHD_ALLOWED));
     }
     
     @Test(expected = OpenAgencyException.class)

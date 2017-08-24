@@ -1,17 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2012 (http://www.altova.com) by DBC A/S (DBC A/S) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:oa="http://oss.dbc.dk/ns/openagency" targetNamespace="http://oss.dbc.dk/ns/openagency" elementFormDefault="qualified">
   <xs:annotation>
     <xs:documentation xml:lang="en">Open Agency service</xs:documentation>
-    <xs:documentation xml:lang="en">This XML Schema describes the data and structure of data of the Open Agency service.</xs:documentation>
-    <xs:documentation xml:lang="en">This file is part of OpenAgency.
-Copyright (c) 20010, Dansk Bibliotekscenter a/s,  Tempovej 7-11, DK-2750 Ballerup, Denmark. CVR: 15149043
-
-OpenAgency is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-OpenAgency is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License along with OpenAgency.  If not, see http://www.gnu.org/licenses/</xs:documentation>
+    <xs:documentation xml:lang="en">
+      This XML Schema describes the data and structure of data of the Open Agency service.
+    </xs:documentation>
+    <xs:documentation xml:lang="en">
+      This file is part of OpenAgency. Copyright (c) 20010, Dansk Bibliotekscenter a/s, Tempovej 7-11, DK-2750 Ballerup, Denmark. CVR: 15149043 OpenAgency is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. OpenAgency is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with OpenAgency. If not, see http://www.gnu.org/licenses/
+    </xs:documentation>
   </xs:annotation>
   <xs:element name="automationRequest">
     <xs:complexType>
@@ -36,6 +31,25 @@ You should have received a copy of the GNU Affero General Public License along w
       </xs:choice>
     </xs:complexType>
   </xs:element>
+  <xs:element name="bobTextsRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="oa:authentication" minOccurs="0"/>
+        <xs:element ref="oa:agencyId" minOccurs="0"/>
+        <xs:element ref="oa:callback" minOccurs="0"/>
+        <xs:element ref="oa:outputType" minOccurs="0"/>
+        <xs:element ref="oa:trackingId" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="bobTextsResponse">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="oa:bobTextsAgency" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="oa:error"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="borrowerCheckListRequest">
     <xs:complexType>
       <xs:sequence>
@@ -52,6 +66,26 @@ You should have received a copy of the GNU Affero General Public License along w
     <xs:complexType>
       <xs:choice>
         <xs:element ref="oa:borrowerCheckLibrary" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="oa:error"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="domainListRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="oa:authentication" minOccurs="0"/>
+        <xs:element ref="oa:agencyId" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="oa:domain" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="oa:callback" minOccurs="0"/>
+        <xs:element ref="oa:outputType" minOccurs="0"/>
+        <xs:element ref="oa:trackingId" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="domainListResponse">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="oa:domainList" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="oa:error"/>
       </xs:choice>
     </xs:complexType>
@@ -136,8 +170,6 @@ You should have received a copy of the GNU Affero General Public License along w
       <xs:sequence>
         <xs:element ref="oa:authentication" minOccurs="0"/>
         <xs:element ref="oa:agencyId"/>
-        <xs:element ref="oa:profileName"/>
-        <xs:element ref="oa:requesterIp" minOccurs="0"/>
         <xs:element ref="oa:callback" minOccurs="0"/>
         <xs:element ref="oa:outputType" minOccurs="0"/>
         <xs:element ref="oa:trackingId" minOccurs="0"/>
@@ -179,7 +211,7 @@ You should have received a copy of the GNU Affero General Public License along w
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="oa:authentication" minOccurs="0"/>
-        <xs:element ref="oa:agencyId" minOccurs="0"  maxOccurs="1"/>
+        <xs:element ref="oa:agencyId" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="oa:callback" minOccurs="0"/>
         <xs:element ref="oa:outputType" minOccurs="0"/>
         <xs:element ref="oa:trackingId" minOccurs="0"/>
@@ -255,7 +287,9 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:element>
   <xs:element name="pickupAgencyListRequest">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Retrieve a list of agencies and branches based on either library type or library parameters. Repeated parameters are combined with OR, while different parameters are combined with AND</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Retrieve a list of agencies and branches based on either library type or library parameters. Repeated parameters are combined with OR, while different parameters are combined with AND
+      </xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -331,7 +365,9 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:element>
   <xs:element name="requestOrderRequest">
     <xs:annotation>
-      <xs:documentation>Retrieve a prioritised list of which agencies materials must be ordered from for a given agency</xs:documentation>
+      <xs:documentation>
+        Retrieve a prioritised list of which agencies materials must be ordered from for a given agency
+      </xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -411,7 +447,9 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:element>
   <xs:element name="showOrderRequest">
     <xs:annotation>
-      <xs:documentation>Retrieve a prioritised list giving the order records should be shown/selected for a given agency</xs:documentation>
+      <xs:documentation>
+        Retrieve a prioritised list giving the order records should be shown/selected for a given agency
+      </xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -524,6 +562,22 @@ You should have received a copy of the GNU Affero General Public License along w
   <xs:element name="autRes" type="xs:string"/>
   <xs:element name="autService" type="oa:autServiceType"/>
   <xs:element name="base64" type="xs:string"/>
+  <xs:element name="label" type="xs:string"/>
+  <xs:element name="text" type="xs:string"/>
+  <xs:element name="texts" type="oa:texts"/>
+  <xs:complexType name="texts">
+    <xs:sequence>
+      <xs:element ref="oa:label"/>
+      <xs:element ref="oa:text"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="bobTextsAgency" type="oa:bobTextsAgency"/>
+  <xs:complexType name="bobTextsAgency">
+    <xs:sequence>
+      <xs:element ref="oa:agencyId"/>
+      <xs:element ref="oa:texts" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="bool" type="xs:boolean"/>
   <xs:element name="borrowerCheckLibrary" type="oa:borrowerCheckLibrary"/>
   <xs:complexType name="borrowerCheckLibrary">
@@ -607,18 +661,16 @@ You should have received a copy of the GNU Affero General Public License along w
   <xs:element name="contactAdmName" type="xs:string"/>
   <xs:element name="contactAdmMail" type="xs:string"/>
   <xs:element name="contactAdmPhone" type="xs:string"/>
-  <xs:element name="CreateAccountId" type="xs:boolean"/>
-  <xs:element name="CreatePatronId" type="xs:boolean"/>
-  <xs:element name="CreateProviderId" type="xs:boolean"/>
   <xs:element name="culrProfile" type="oa:culrProfile">
     <xs:annotation>
-      <xs:documentation xml:lang="en">The CULR functions are named as defined by the CULR API</xs:documentation>
+      <xs:documentation xml:lang="en">
+        The CULR functions are named as defined by the CULR API
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="culrProfile">
     <xs:sequence>
       <xs:element ref="oa:agencyId"/>
-      <xs:element ref="oa:profileName"/>
       <xs:element ref="oa:typeOfClient"/>
       <xs:element ref="oa:contactTechName"/>
       <xs:element ref="oa:contactTechMail"/>
@@ -626,29 +678,13 @@ You should have received a copy of the GNU Affero General Public License along w
       <xs:element ref="oa:contactAdmName"/>
       <xs:element ref="oa:contactAdmMail"/>
       <xs:element ref="oa:contactAdmPhone"/>
-      <xs:element ref="oa:CreateAccountId"/>
-      <xs:element ref="oa:CreatePatronId"/>
-      <xs:element ref="oa:CreateProviderId"/>
-      <xs:element ref="oa:DeleteAccountId"/>
-      <xs:element ref="oa:DeletePatronId"/>
-      <xs:element ref="oa:DeleteProviderId"/>
-      <xs:element ref="oa:GetAccountIdsByAccountId"/>
-      <xs:element ref="oa:GetAccountIdsByPatronId"/>
-      <xs:element ref="oa:GetAccountIdsByProviderId"/>
-      <xs:element ref="oa:GetMunicipalityNoByAccountId"/>
-      <xs:element ref="oa:GetMunicipalityNoByPatronId"/>
-      <xs:element ref="oa:GetPatronIdsByAccountId"/>
-      <xs:element ref="oa:GetPatronIdsByProviderId"/>
-      <xs:element ref="oa:GetProviderIdsByAccountId"/>
-      <xs:element ref="oa:GetProviderIdsByPatronId"/>
-      <xs:element ref="oa:MergePatronIds"/>
-      <xs:element ref="oa:UnrelatePatronIdAndAccountId"/>
-      <xs:element ref="oa:UpdateAccountId"/>
     </xs:sequence>
   </xs:complexType>
   <xs:element name="customIdTxt" type="oa:customIdTxt">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Label text for userParameterType=customId (for use in end user interface)</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Label text for userParameterType=customId (for use in end user interface)
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="customIdTxt">
@@ -659,10 +695,14 @@ You should have received a copy of the GNU Affero General Public License along w
     </xs:simpleContent>
   </xs:complexType>
   <xs:element name="date" type="xs:string"/>
-  <xs:element name="DeleteAccountId" type="xs:boolean"/>
-  <xs:element name="DeletePatronId" type="xs:boolean"/>
-  <xs:element name="DeleteProviderId" type="xs:boolean"/>
   <xs:element name="distanceInMeter" type="xs:integer"/>
+  <xs:element name="domainList" type="oa:domainList"/>
+  <xs:complexType name="domainList">
+    <xs:sequence>
+      <xs:element ref="oa:agencyId" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="oa:branchDomains" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="dropOffAgency" type="xs:string"/>
   <xs:element name="dropOffBranch" type="xs:string"/>
   <xs:element name="dropOffName" type="xs:string"/>
@@ -689,19 +729,12 @@ You should have received a copy of the GNU Affero General Public License along w
       <xs:element ref="oa:distanceInMeter" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="GetAccountIdsByAccountId" type="xs:boolean"/>
-  <xs:element name="GetAccountIdsByPatronId" type="xs:boolean"/>
-  <xs:element name="GetAccountIdsByProviderId" type="xs:boolean"/>
-  <xs:element name="GetMunicipalityNoByAccountId" type="xs:boolean"/>
-  <xs:element name="GetMunicipalityNoByPatronId" type="xs:boolean"/>
-  <xs:element name="GetPatronIdsByAccountId" type="xs:boolean"/>
-  <xs:element name="GetPatronIdsByProviderId" type="xs:boolean"/>
-  <xs:element name="GetProviderIdsByAccountId" type="xs:boolean"/>
-  <xs:element name="GetProviderIdsByPatronId" type="xs:boolean"/>
   <xs:element name="groupId" type="xs:string"/>
   <xs:element name="groupIdAut" type="xs:string">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Identifier of the group (most often a library number) the user belongs to (for authentication purposes)</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Identifier of the group (most often a library number) the user belongs to (for authentication purposes)
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="headOfBranchName" type="xs:string"/>
@@ -775,7 +808,9 @@ You should have received a copy of the GNU Affero General Public License along w
   <xs:element name="isOclcRsLibrary" type="xs:boolean"/>
   <xs:element name="itemParameter" type="oa:itemParameter">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Indicator whether a given itemParameterType is either required or optional for the given combination of orderType and orderMaterialType</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Indicator whether a given itemParameterType is either required or optional for the given combination of orderType and orderMaterialType
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="itemParameter">
@@ -863,7 +898,6 @@ You should have received a copy of the GNU Affero General Public License along w
   <xs:element name="longitude" type="xs:decimal"/>
   <xs:element name="lookupUrl" type="xs:string"/>
   <xs:element name="materialType" type="xs:integer"/>
-  <xs:element name="MergePatronIds" type="xs:boolean"/>
   <xs:element name="name" type="xs:string"/>
   <xs:element name="nationalDeliveryService" type="xs:boolean"/>
   <xs:element name="ncipCancelOrder" type="xs:boolean"/>
@@ -884,7 +918,9 @@ You should have received a copy of the GNU Affero General Public License along w
   <xs:element name="orderMaterialType" type="oa:orderMaterialTypeType"/>
   <xs:element name="orderParameters" type="oa:orderParameters">
     <xs:annotation>
-      <xs:documentation xml:lang="en">List of item parameters are that are either required or optional for different types of orders (as set in the combination of orderType and orderMaterialType)</xs:documentation>
+      <xs:documentation xml:lang="en">
+        List of item parameters are that are either required or optional for different types of orders (as set in the combination of orderType and orderMaterialType)
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="orderParameters">
@@ -1003,7 +1039,9 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:complexType>
   <xs:element name="pickupAllowed" type="xs:boolean">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Indicator whether materials can be picked up at the given branch/agency. If used in a request, only agencies/branches that matches it's value will be retrieved</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Indicator whether materials can be picked up at the given branch/agency. If used in a request, only agencies/branches that matches it's value will be retrieved
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="postalAddress" type="xs:string"/>
@@ -1058,7 +1096,6 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:complexType>
   <xs:element name="replyToEmail" type="xs:string"/>
   <xs:element name="requester" type="xs:string"/>
-  <xs:element name="requesterIp" type="xs:string"/>
   <xs:element name="requestOrder" type="xs:string"/>
   <xs:element name="responder" type="xs:string"/>
   <xs:element name="sender" type="xs:string"/>
@@ -1122,19 +1159,19 @@ You should have received a copy of the GNU Affero General Public License along w
     </xs:simpleContent>
   </xs:complexType>
   <xs:element name="trackingId" type="xs:string">
-      <xs:annotation>
-          <xs:documentation xml:lang="en">Unique id to track this request</xs:documentation>
-      </xs:annotation>
+    <xs:annotation>
+      <xs:documentation xml:lang="en">Unique id to track this request</xs:documentation>
+    </xs:annotation>
   </xs:element>
   <xs:element name="typeOfClient" type="xs:string"/>
-  <xs:element name="UnrelatePatronIdAndAccountId" type="xs:boolean"/>
-  <xs:element name="UpdateAccountId" type="xs:boolean"/>
   <xs:element name="url" type="xs:string"/>
   <xs:element name="userId" type="xs:string"/>
   <xs:element name="userIdType" type="oa:userIdTypeType"/>
   <xs:element name="userIdTxt" type="oa:userIdTxt">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Explanation text for userParameterType=userId (for use in end user interface)</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Explanation text for userParameterType=userId (for use in end user interface)
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="userIdTxt">
@@ -1151,7 +1188,9 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:element>
   <xs:element name="userOrderParameters" type="oa:userOrderParameters">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Returns explanation texts and information about user- and item parameters that are either required or optional for different types of orders.</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Returns explanation texts and information about user- and item parameters that are either required or optional for different types of orders.
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="userOrderParameters">
@@ -1170,7 +1209,9 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:element>
   <xs:element name="userParameter" type="oa:userParameter">
     <xs:annotation>
-      <xs:documentation xml:lang="en">Indicatior whether a given userParameterType is required or optional for orders.</xs:documentation>
+      <xs:documentation xml:lang="en">
+        Indicatior whether a given userParameterType is required or optional for orders.
+      </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="userParameter">
@@ -1276,6 +1317,7 @@ You should have received a copy of the GNU Affero General Public License along w
       <xs:enumeration value="Folkebibliotek"/>
       <xs:enumeration value="Forskningsbibliotek"/>
       <xs:enumeration value="Skolebibliotek"/>
+      <xs:enumeration value="Other"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="orderMaterialTypeType">
@@ -1307,7 +1349,9 @@ You should have received a copy of the GNU Affero General Public License along w
   </xs:simpleType>
   <xs:simpleType name="outputTypeType">
     <xs:annotation>
-      <xs:documentation xml:lang="en">The types of output that can be returned by the service.</xs:documentation>
+      <xs:documentation xml:lang="en">
+        The types of output that can be returned by the service.
+      </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
       <xs:enumeration value="xml"/>
