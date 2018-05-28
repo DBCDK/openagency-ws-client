@@ -55,7 +55,8 @@ public class LibraryRuleHandler {
         AUTH_AGENCY_COMMON_RECORD("auth_agency_common_record"),
         AUTH_EXPORT_HOLDINGS("auth_export_holdings"),
         AUTH_CREATE_COMMON_RECORD("auth_create_common_record"),
-        AUTH_ADD_DK5_TO_PHD_ALLOWED("auth_create_common_record");
+        AUTH_ADD_DK5_TO_PHD_ALLOWED("auth_create_common_record"),
+        AUTH_METACOMPASS("auth_metacompass");
 
         private final String value;
 
