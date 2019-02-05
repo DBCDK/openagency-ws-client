@@ -43,6 +43,7 @@ public class LibraryRuleHandler {
     public enum Rule {
         CREATE_ENRICHMENTS("create_enrichments"),
         PART_OF_BIBLIOTEK_DK("part_of_bibliotek_dk"),
+        PART_OF_DANBIB("part_of_danbib"),
         USE_ENRICHMENTS("use_enrichments"),
         USE_LOCALDATA_STREAM("use_localdata_stream"),
         USE_HOLDINGS_ITEM("use_holdings_item"),

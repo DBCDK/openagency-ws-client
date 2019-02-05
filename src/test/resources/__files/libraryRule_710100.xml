@@ -62,6 +62,14 @@
                     <oa:bool>1</oa:bool>
                 </oa:libraryRule>
                 <oa:libraryRule>
+                    <oa:name>part_of_danbib</oa:name>
+                    <oa:bool>1</oa:bool>
+                </oa:libraryRule>
+                <oa:libraryRule>
+                    <oa:name>part_of_bibliotek_dk</oa:name>
+                    <oa:bool>0</oa:bool>
+                </oa:libraryRule>
+                <oa:libraryRule>
                     <oa:name>auth_metacompass</oa:name>
                     <oa:bool>0</oa:bool>
                 </oa:libraryRule>
