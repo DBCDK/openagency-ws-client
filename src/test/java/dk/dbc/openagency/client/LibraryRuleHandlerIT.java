@@ -51,6 +51,8 @@ public class LibraryRuleHandlerIT extends WireMocker {
         assertEquals(false, libraryRules.isAllowed("710100", Rule.AUTH_CREATE_COMMON_RECORD));
         assertEquals(false, libraryRules.isAllowed("710100", Rule.AUTH_ADD_DK5_TO_PHD_ALLOWED));
         assertEquals(false, libraryRules.isAllowed("710100", Rule.AUTH_METACOMPASS));
+        assertEquals(true, libraryRules.isAllowed("710100", Rule.PART_OF_DANBIB));
+        assertEquals(false, libraryRules.isAllowed("710100", Rule.PART_OF_BIBLIOTEK_DK));
 
         assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_AGENCY_COMMON_RECORD));
         assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_COMMON_NOTES));
@@ -66,6 +68,8 @@ public class LibraryRuleHandlerIT extends WireMocker {
         assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_CREATE_COMMON_RECORD));
         assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_ADD_DK5_TO_PHD_ALLOWED));
         assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_METACOMPASS));
+        assertEquals(true, libraryRules.isAllowed(710100, Rule.PART_OF_DANBIB));
+        assertEquals(false, libraryRules.isAllowed(710100, Rule.PART_OF_BIBLIOTEK_DK));
     }
 
     @Test(expected = OpenAgencyException.class)
