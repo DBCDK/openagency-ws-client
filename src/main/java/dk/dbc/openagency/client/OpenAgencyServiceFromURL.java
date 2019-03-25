@@ -44,6 +44,7 @@ public class OpenAgencyServiceFromURL {
     final OpenAgencyService service;
     final Authentication authentication;
     final OpenAgencyPortType port;
+    final FindLibrary findLibrary;
     final LibraryRuleHandler libraryRuleHandler;
     final LibraryTypeList libraryTypeList;
     final ShowOrder showOrder;
@@ -101,9 +102,14 @@ public class OpenAgencyServiceFromURL {
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
         bindingProvider.getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         bindingProvider.getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
+        findLibrary = new FindLibrary(this);
         libraryRuleHandler = new LibraryRuleHandler(this, cacheAge);
         libraryTypeList = new LibraryTypeList(this);
         showOrder = new ShowOrder(this);
+    }
+
+    public FindLibrary findLibrary() {
+        return findLibrary;
     }
 
     public ShowOrder showOrder() {
