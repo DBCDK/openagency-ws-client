@@ -28,8 +28,6 @@ import org.junit.Test;
 
 
 /**
- *
- * @author Morten Bøgeskov <mb@dbc.dk>
  */
 public class FindLibraryIT extends WireMocker  {
     final String request="<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><ns1:findLibraryRequest xmlns:ns1=\"http://oss.dbc.dk/ns/openagency\"><ns1:agencyId>710100</ns1:agencyId></ns1:findLibraryRequest></S:Body></S:Envelope>";

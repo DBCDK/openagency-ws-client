@@ -26,11 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Object to access OpenAgency's ShowOrder call
+ * Object to access OpenAgency's FindLibrary call
  *
  * Caches results for 8 hours
- *
- * @author Morten Bøgeskov <mb@dbc.dk>
  */
 public class FindLibrary {
 
@@ -47,11 +45,10 @@ public class FindLibrary {
     }
 
     /**
-     * Fetch the order in which the agency wishes to see records based upon
-     * owner
+     * Fetch Library information for an agency
      *
      * @param agencyId agency to query for
-     * @return List of Strings
+     * @return PickupAgency properties
      * @throws OpenAgencyException
      */
     public PickupAgency findLibraryByAgency(int agencyId) throws OpenAgencyException {
