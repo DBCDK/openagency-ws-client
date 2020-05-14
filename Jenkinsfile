@@ -9,14 +9,8 @@ pipeline {
         pollSCM('H/5 * * * *')
         upstream(upstreamProjects: "dbc-pom,", threshold: hudson.model.Result.SUCCESS)
     }
-    
     agent {
-
         label "devel8-head"
-/*        docker {
-            image 'docker-i.dbc.dk/ja7dev'
-            args '-v /tmp:/tmp'
-        }                                                */
     }
     stages {
         stage("build") {
@@ -36,7 +30,6 @@ pipeline {
                     }
                 }
             }
-
         }
     }
     post {
@@ -48,14 +41,12 @@ pipeline {
             build job: 'hive', wait: false
             emailext subject: "SUCCESSFUL: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]",
                     body: """"SUCCESSFUL: Job '${env.JOB_NAME}' checkout console output at ${env.BUILD_URL}""",
-//                    to: 'iscrum@dbc.dk'
                     to: 'jp@dbc.dk'
             sh "mvn deploy"
         }
         failure {
             emailext subject: "FAILED: Job '${env.JOB_NAME}' [${env.BUILD_NUMBER}]",
                     body: """"FAILED: Job '${env.JOB_NAME}' checkout console output at ${env.BUILD_URL}""",
-//                    to: 'jp@dbc.dk',
                     attachLog: true
         }
     }
