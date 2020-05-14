@@ -22,11 +22,17 @@ import com.github.tomakehurst.wiremock.http.Fault;
 import dk.dbc.openagency.client.LibraryRuleHandler.Rule;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class LibraryRuleHandlerIT extends WireMocker {
 
@@ -36,40 +42,40 @@ public class LibraryRuleHandlerIT extends WireMocker {
         stubForReturnOK("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><ns1:libraryRulesRequest xmlns:ns1=\"http://oss.dbc.dk/ns/openagency\"><ns1:agencyId>710100</ns1:agencyId></ns1:libraryRulesRequest></S:Body></S:Envelope>",
                 "libraryRule_710100.xml");
 
-
         LibraryRuleHandler libraryRules = service.libraryRules();
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.AUTH_AGENCY_COMMON_RECORD));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.AUTH_COMMON_NOTES));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.AUTH_COMMON_SUBJECTS));
-        assertEquals(false, libraryRules.isAllowed("710100", Rule.AUTH_DBC_RECORDS));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.AUTH_EXPORT_HOLDINGS));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.AUTH_PUBLIC_LIB_COMMON_RECORD));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.AUTH_RET_RECORD));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.AUTH_ROOT));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.CREATE_ENRICHMENTS));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.USE_ENRICHMENTS));
-        assertEquals(false, libraryRules.isAllowed("710100", Rule.AUTH_CREATE_COMMON_RECORD));
-        assertEquals(false, libraryRules.isAllowed("710100", Rule.AUTH_ADD_DK5_TO_PHD_ALLOWED));
-        assertEquals(false, libraryRules.isAllowed("710100", Rule.AUTH_METACOMPASS));
-        assertEquals(true, libraryRules.isAllowed("710100", Rule.PART_OF_DANBIB));
-        assertEquals(false, libraryRules.isAllowed("710100", Rule.PART_OF_BIBLIOTEK_DK));
+        assertTrue(libraryRules.isAllowed("710100", Rule.AUTH_AGENCY_COMMON_RECORD));
+        assertTrue(libraryRules.isAllowed("710100", Rule.AUTH_COMMON_NOTES));
+        assertTrue(libraryRules.isAllowed("710100", Rule.AUTH_COMMON_SUBJECTS));
+        assertFalse(libraryRules.isAllowed("710100", Rule.AUTH_DBC_RECORDS));
+        assertTrue(libraryRules.isAllowed("710100", Rule.AUTH_EXPORT_HOLDINGS));
+        assertTrue(libraryRules.isAllowed("710100", Rule.AUTH_PUBLIC_LIB_COMMON_RECORD));
+        assertTrue(libraryRules.isAllowed("710100", Rule.AUTH_RET_RECORD));
+        assertTrue(libraryRules.isAllowed("710100", Rule.AUTH_ROOT));
+        assertTrue(libraryRules.isAllowed("710100", Rule.CREATE_ENRICHMENTS));
+        assertTrue(libraryRules.isAllowed("710100", Rule.USE_ENRICHMENTS));
+        assertFalse(libraryRules.isAllowed("710100", Rule.USE_HOLDINGS_ITEM));
+        assertFalse(libraryRules.isAllowed("710100", Rule.AUTH_CREATE_COMMON_RECORD));
+        assertFalse(libraryRules.isAllowed("710100", Rule.AUTH_ADD_DK5_TO_PHD_ALLOWED));
+        assertFalse(libraryRules.isAllowed("710100", Rule.AUTH_METACOMPASS));
+        assertTrue(libraryRules.isAllowed("710100", Rule.PART_OF_DANBIB));
+        assertFalse(libraryRules.isAllowed("710100", Rule.PART_OF_BIBLIOTEK_DK));
 
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_AGENCY_COMMON_RECORD));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_COMMON_NOTES));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_COMMON_SUBJECTS));
-        assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_DBC_RECORDS));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_EXPORT_HOLDINGS));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_PUBLIC_LIB_COMMON_RECORD));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_RET_RECORD));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.AUTH_ROOT));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.CREATE_ENRICHMENTS));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.USE_ENRICHMENTS));
-        assertEquals(false, libraryRules.isAllowed(710100, Rule.USE_HOLDINGS_ITEM));
-        assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_CREATE_COMMON_RECORD));
-        assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_ADD_DK5_TO_PHD_ALLOWED));
-        assertEquals(false, libraryRules.isAllowed(710100, Rule.AUTH_METACOMPASS));
-        assertEquals(true, libraryRules.isAllowed(710100, Rule.PART_OF_DANBIB));
-        assertEquals(false, libraryRules.isAllowed(710100, Rule.PART_OF_BIBLIOTEK_DK));
+        assertTrue(libraryRules.isAllowed(710100, Rule.AUTH_AGENCY_COMMON_RECORD));
+        assertTrue(libraryRules.isAllowed(710100, Rule.AUTH_COMMON_NOTES));
+        assertTrue(libraryRules.isAllowed(710100, Rule.AUTH_COMMON_SUBJECTS));
+        assertFalse(libraryRules.isAllowed(710100, Rule.AUTH_DBC_RECORDS));
+        assertTrue(libraryRules.isAllowed(710100, Rule.AUTH_EXPORT_HOLDINGS));
+        assertTrue(libraryRules.isAllowed(710100, Rule.AUTH_PUBLIC_LIB_COMMON_RECORD));
+        assertTrue(libraryRules.isAllowed(710100, Rule.AUTH_RET_RECORD));
+        assertTrue(libraryRules.isAllowed(710100, Rule.AUTH_ROOT));
+        assertTrue(libraryRules.isAllowed(710100, Rule.CREATE_ENRICHMENTS));
+        assertTrue(libraryRules.isAllowed(710100, Rule.USE_ENRICHMENTS));
+        assertFalse(libraryRules.isAllowed(710100, Rule.USE_HOLDINGS_ITEM));
+        assertFalse(libraryRules.isAllowed(710100, Rule.AUTH_CREATE_COMMON_RECORD));
+        assertFalse(libraryRules.isAllowed(710100, Rule.AUTH_ADD_DK5_TO_PHD_ALLOWED));
+        assertFalse(libraryRules.isAllowed(710100, Rule.AUTH_METACOMPASS));
+        assertTrue(libraryRules.isAllowed(710100, Rule.PART_OF_DANBIB));
+        assertFalse(libraryRules.isAllowed(710100, Rule.PART_OF_BIBLIOTEK_DK));
     }
 
     @Test(expected = OpenAgencyException.class)
@@ -100,6 +106,16 @@ public class LibraryRuleHandlerIT extends WireMocker {
     }
 
     @Test
+    public void testgetLibrariesByCatalogingTemplateSet() throws Exception {
+        stubForReturnOK("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><ns1:libraryRulesRequest xmlns:ns1=\"http://oss.dbc.dk/ns/openagency\"><ns1:libraryRule><ns1:name>cataloging_template_set</ns1:name><ns1:string>fbs</ns1:string></ns1:libraryRule></ns1:libraryRulesRequest></S:Body></S:Envelope>",
+                "libraryRule_cataloging_template_set.xml");
+
+        final LibraryRuleHandler libraryRules = service.libraryRules();
+        final Set<String> actual = libraryRules.getLibrariesByCatalogingTemplateSet("fbs");
+        assertEquals(new HashSet<>(Arrays.asList("710100", "710200")), actual);
+    }
+
+    @Test
     public void testRetriesFor_executeRequest() throws Exception {
         stubForSequence("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><ns1:libraryRulesRequest xmlns:ns1=\"http://oss.dbc.dk/ns/openagency\"><ns1:agencyId>710100</ns1:agencyId></ns1:libraryRulesRequest></S:Body></S:Envelope>",
                 aResponse().withStatus(500).withBody("Failure"),
@@ -115,5 +131,27 @@ public class LibraryRuleHandlerIT extends WireMocker {
         verify(4, postRequestedFor(urlEqualTo("/")));
     }
 
+    @Test
+    public void testGetAllowedLibraryRules() throws Exception {
+        stubForReturnOK("<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><ns1:libraryRulesRequest xmlns:ns1=\"http://oss.dbc.dk/ns/openagency\"><ns1:agencyId>710100</ns1:agencyId></ns1:libraryRulesRequest></S:Body></S:Envelope>",
+                "libraryRule_710100.xml");
+
+        final LibraryRuleHandler libraryRuleHandler = service.libraryRuleHandler;
+        final Set<String> expected = new HashSet<>(Arrays.asList(
+                "auth_public_lib_common_record",
+                "auth_common_notes",
+                "auth_agency_common_record",
+                "create_enrichments",
+                "part_of_danbib",
+                "auth_common_subjects",
+                "auth_root",
+                "auth_export_holdings",
+                "use_enrichments",
+                "auth_ret_record",
+                "auth_add_dk5_to_phd"
+        ));
+        final Set<String> actual = libraryRuleHandler.getAllowedLibraryRules("710100");
+        assertEquals(expected, actual);
+    }
 
 }
