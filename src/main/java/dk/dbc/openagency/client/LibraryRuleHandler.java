@@ -34,7 +34,8 @@ import java.util.Set;
 public class LibraryRuleHandler {
     private final Logger log = LoggerFactory.getLogger(LibraryRuleHandler.class);
 
-    private static final int MAX_AGE_HOURS = 8;
+    private static final long MS_PER_HOUR = 3600L * 1000;
+    private static final int DEFAULT_AGE_HOURS = 8;
     private final Cache<String, Set<String>> libraryRulesCache;
     private final Cache<String, String> catalogingTemplateCache;
     private final Cache<String, Set<String>> catalogingTemplateSetCache;
@@ -76,16 +77,16 @@ public class LibraryRuleHandler {
     }
 
     public LibraryRuleHandler(OpenAgencyServiceFromURL service, int maxAge) {
-        this.libraryRulesCache = new Cache<>(maxAge * 3600 * 1000);
-        this.catalogingTemplateCache = new Cache<>(maxAge * 3600 * 1000);
-        this.catalogingTemplateSetCache = new Cache<>(maxAge * 3600 * 1000);
+        this.libraryRulesCache = new Cache<>(maxAge * MS_PER_HOUR);
+        this.catalogingTemplateCache = new Cache<>(maxAge * MS_PER_HOUR);
+        this.catalogingTemplateSetCache = new Cache<>(maxAge * MS_PER_HOUR);
         this.service = service;
     }
 
     public LibraryRuleHandler(OpenAgencyServiceFromURL service) {
-        this.libraryRulesCache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
-        this.catalogingTemplateCache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
-        this.catalogingTemplateSetCache = new Cache<>(MAX_AGE_HOURS * 3600 * 1000);
+        this.libraryRulesCache = new Cache<>(DEFAULT_AGE_HOURS * MS_PER_HOUR);
+        this.catalogingTemplateCache = new Cache<>(DEFAULT_AGE_HOURS * MS_PER_HOUR);
+        this.catalogingTemplateSetCache = new Cache<>(DEFAULT_AGE_HOURS * MS_PER_HOUR);
 
         this.service = service;
     }

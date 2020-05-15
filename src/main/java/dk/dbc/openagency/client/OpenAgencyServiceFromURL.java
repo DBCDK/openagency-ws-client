@@ -24,8 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.WebServiceException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
